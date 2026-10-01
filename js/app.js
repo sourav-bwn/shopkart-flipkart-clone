@@ -1,7 +1,21 @@
 // ShopKart - Main Application JavaScript
 
-// Initialize cart from localStorage or empty array
-let cart = JSON.parse(localStorage.getItem('cart')) || [];
+// Recover saved quantities using current catalog data, not stale stored product fields.
+function loadCart() {
+    try {
+        const saved = JSON.parse(localStorage.getItem('cart'));
+        if (!Array.isArray(saved)) return [];
+        return saved.flatMap(item => {
+            if (!item || !Number.isSafeInteger(item.quantity) || item.quantity <= 0) return [];
+            const product = products.find(p => p.id === item.id);
+            return product ? [{ ...product, quantity: item.quantity }] : [];
+        });
+    } catch {
+        // Corrupt JSON or unavailable storage must not prevent the storefront loading.
+        return [];
+    }
+}
+let cart = loadCart();
 let currentCategory = 'all';
 let currentFilters = {
     maxPrice: 100000,
