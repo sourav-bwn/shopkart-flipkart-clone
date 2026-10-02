@@ -187,7 +187,7 @@ function renderProducts() {
         : '<div class="empty-cart"><i class="fas fa-search"></i><p>No products found</p></div>';
 
     // Add click listeners to product cards
-    document.querySelectorAll('.product-card').forEach(card => {
+    productsGrid.querySelectorAll('.product-card').forEach(card => {
         card.addEventListener('click', (e) => {
             if (!e.target.classList.contains('add-to-cart-btn')) {
                 const productId = parseInt(card.dataset.productId);
@@ -197,7 +197,7 @@ function renderProducts() {
     });
 
     // Add to cart buttons
-    document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+    productsGrid.querySelectorAll('.add-to-cart-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.stopPropagation();
             const productId = parseInt(btn.dataset.productId);
