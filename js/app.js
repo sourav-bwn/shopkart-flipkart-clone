@@ -17,8 +17,9 @@ function loadCart() {
 }
 let cart = loadCart();
 let currentCategory = 'all';
+const catalogMaxPrice = Math.ceil(Math.max(0, ...products.map(p => p.price)) / 1000) * 1000;
 let currentFilters = {
-    maxPrice: 100000,
+    maxPrice: catalogMaxPrice,
     brands: [],
     minRating: 0,
     minDiscount: 0
@@ -42,6 +43,9 @@ const productsTitle = document.getElementById('products-title');
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', () => {
+    priceRange.max = catalogMaxPrice;
+    priceRange.value = catalogMaxPrice;
+    maxPriceLabel.textContent = `₹${catalogMaxPrice.toLocaleString()}`;
     renderProducts();
     renderDeals();
     updateCart();
@@ -310,14 +314,14 @@ function handleSearch() {
 // Clear All Filters
 function clearFilters() {
     currentFilters = {
-        maxPrice: 100000,
+        maxPrice: catalogMaxPrice,
         brands: [],
         minRating: 0,
         minDiscount: 0
     };
 
-    priceRange.value = 100000;
-    maxPriceLabel.textContent = '₹100,000';
+    priceRange.value = catalogMaxPrice;
+    maxPriceLabel.textContent = `₹${catalogMaxPrice.toLocaleString()}`;
     
     document.querySelectorAll('.filters-sidebar input[type="checkbox"]').forEach(cb => cb.checked = false);
     document.querySelectorAll('.filters-sidebar input[type="radio"]').forEach(rb => rb.checked = false);
