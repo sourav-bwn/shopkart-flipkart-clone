@@ -422,7 +422,13 @@ function closeCart() {
 }
 
 function saveCart() {
-    localStorage.setItem('cart', JSON.stringify(cart));
+    try {
+        localStorage.setItem('cart', JSON.stringify(cart));
+        return true;
+    } catch {
+        // Keep cart actions usable in this tab when storage is blocked or full.
+        return false;
+    }
 }
 
 // Deal Timer
