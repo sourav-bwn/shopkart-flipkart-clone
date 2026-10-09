@@ -348,6 +348,7 @@ function addToCart(productId) {
 
     const existingItem = cart.find(item => item.id === productId);
     if (existingItem) {
+        if (!Number.isSafeInteger(existingItem.quantity + 1)) return;
         existingItem.quantity++;
     } else {
         cart.push({
@@ -371,7 +372,10 @@ function updateQuantity(productId, change) {
     const item = cart.find(item => item.id === productId);
     if (!item) return;
 
-    item.quantity += change;
+    if (!Number.isSafeInteger(change)) return;
+    const quantity = item.quantity + change;
+    if (!Number.isSafeInteger(quantity)) return;
+    item.quantity = quantity;
     if (item.quantity <= 0) {
         removeFromCart(productId);
     } else {
