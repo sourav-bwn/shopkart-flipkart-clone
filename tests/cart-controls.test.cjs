@@ -22,3 +22,14 @@ test('combining duplicate rows never overflows safe integer quantity',()=>{
     const x=app(JSON.stringify([{id:1,quantity:Number.MAX_SAFE_INTEGER},{id:1,quantity:1}]));
     assert.equal(x.cart().length,1);assert.equal(x.cart()[0].quantity,Number.MAX_SAFE_INTEGER);
 });
+test('add and plus button preserve a maximum safe quantity without persisting overflow',()=>{
+    const x=app(JSON.stringify([{id:1,quantity:Number.MAX_SAFE_INTEGER}]));
+    x.context.addToCart(1);x.context.updateQuantity(1,1);
+    assert.equal(x.cart()[0].quantity,Number.MAX_SAFE_INTEGER);assert.equal(x.writes(),0);
+});
+test('quantity changes reject fractions and nonnumeric values but minus still removes at zero',()=>{
+    const x=app(JSON.stringify([{id:1,quantity:1}]));
+    for(const change of [NaN,Infinity,0.5,'1',null])x.context.updateQuantity(1,change);
+    assert.equal(x.cart()[0].quantity,1);assert.equal(x.writes(),0);
+    x.context.updateQuantity(1,-1);assert.deepEqual(x.cart(),[]);assert.equal(x.writes(),1);
+});
