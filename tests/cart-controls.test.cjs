@@ -33,3 +33,14 @@ test('quantity changes reject fractions and nonnumeric values but minus still re
     assert.equal(x.cart()[0].quantity,1);assert.equal(x.writes(),0);
     x.context.updateQuantity(1,-1);assert.deepEqual(x.cart(),[]);assert.equal(x.writes(),1);
 });
+test('Escape closes cart and both modals and restores page scrolling',()=>{
+    const x=app(null);x.context.setupEventListeners();
+    assert.equal(typeof x.listeners.keydown,'function');x.listeners.keydown({key:'Escape'});
+    for(const id of ['cart-sidebar','cart-overlay','login-modal','product-modal'])assert.equal(x.nodes[id].classList.active,false,id);
+    assert.equal(x.document.body.style.overflow,'');
+});
+test('other keyboard input leaves overlays and scrolling state alone',()=>{
+    const x=app(null);x.context.setupEventListeners();x.listeners.keydown({key:'Enter'});
+    assert.equal(x.nodes['cart-sidebar'].classList.active,true);assert.equal(x.nodes['login-modal'].classList.active,true);
+    assert.equal(x.document.body.style.overflow,'hidden');
+});
