@@ -140,6 +140,14 @@ function setupEventListeners() {
         loginModal.classList.remove('active');
     });
 
+    // Escape closes overlays and restores scrolling through the existing cart close path.
+    document.addEventListener('keydown', (e) => {
+        if (e.key !== 'Escape') return;
+        closeCart();
+        loginModal.classList.remove('active');
+        productModal.classList.remove('active');
+    });
+
     // Close modals on outside click
     window.addEventListener('click', (e) => {
         if (e.target === loginModal) loginModal.classList.remove('active');
