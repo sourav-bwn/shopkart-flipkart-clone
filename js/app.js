@@ -5,11 +5,18 @@ function loadCart() {
     try {
         const saved = JSON.parse(localStorage.getItem('cart'));
         if (!Array.isArray(saved)) return [];
-        return saved.flatMap(item => {
-            if (!item || !Number.isSafeInteger(item.quantity) || item.quantity <= 0) return [];
+        const restored = [];
+        saved.forEach(item => {
+            if (!item || !Number.isSafeInteger(item.quantity) || item.quantity <= 0) return;
             const product = products.find(p => p.id === item.id);
-            return product ? [{ ...product, quantity: item.quantity }] : [];
+            if (!product) return;
+            const existing = restored.find(entry => entry.id === product.id);
+            if (existing) {
+                const combined = existing.quantity + item.quantity;
+                if (Number.isSafeInteger(combined)) existing.quantity = combined;
+            } else restored.push({ ...product, quantity: item.quantity });
         });
+        return restored;
     } catch {
         // Corrupt JSON or unavailable storage must not prevent the storefront loading.
         return [];
