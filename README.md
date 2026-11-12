@@ -52,14 +52,15 @@ A modern e-commerce website inspired by Flipkart, built with HTML, CSS, and Java
 ## File Structure
 
 ```
-flipkart-clone/
+shopkart-flipkart-clone/
 ├── index.html          # Main HTML file
 ├── css/
-│   └── style.css      # All styles
+│   └── style.css       # All styles
 ├── js/
-│   ├── products.js    # Product data (30 products)
-│   └── app.js         # Main application logic
-└── images/            # Image directory (using external URLs)
+│   ├── products.js     # Product data (30 products)
+│   └── app.js          # Main application logic
+├── tests/              # Offline regression tests (node --test)
+└── start-server.sh     # Optional local server helper
 ```
 
 ## Technologies Used
@@ -83,3 +84,14 @@ flipkart-clone/
 - Cart data persists in browser localStorage
 - Login functionality is UI-only (no backend)
 - Checkout is demo-only (no payment processing)
+## Tests
+
+Offline regression tests for the cart, filters and product logic (Node 18+, no dependencies):
+
+```bash
+node --test tests/cart.test.cjs
+node --test tests/cart-controls.test.cjs
+node --test tests/cart-storage.test.cjs
+node --test tests/price-filter.test.cjs
+node --test tests/product-events.test.cjs
+```
